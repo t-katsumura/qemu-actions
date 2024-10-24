@@ -1,0 +1,37 @@
+name: QEMU
+
+on: [push, workflow_dispatch]
+
+jobs:
+  unit:
+    name: QEMU
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+          - linux/amd64
+          - linux/arm64
+          # - linux/riscv64  # Not supported by go official image.
+          - linux/ppc64le
+          - linux/s390x
+          # - linux/386      # Runtime error occurs.
+          # - linux/mips64le # Runtime error occurs.
+          # - linux/mips64   # Not supported by go official image.
+          - linux/arm/v7
+          # - linux/arm/v6   # Not supported by go official image.
+    steps:
+      - run: git config --global core.autocrlf false
+      - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: ${{ matrix.arch }}
+      - name: Docker run
+        run: |
+          docker run \
+            --rm \
+            -v $(pwd):/${{ github.workspace }} \
+            --platform ${{ matrix.arch }} \
+            golang:1.23.2 \
+            bash -c "go run /${{ github.workspace }}/main.go"
