@@ -11,27 +11,23 @@ jobs:
       fail-fast: false
       matrix:
         arch:
-          - linux/amd64
-          - linux/arm64
-          # - linux/riscv64  # Not supported by go official image.
-          - linux/ppc64le
-          - linux/s390x
-          # - linux/386      # Runtime error occurs.
-          # - linux/mips64le # Runtime error occurs.
-          # - linux/mips64   # Not supported by go official image.
-          - linux/arm/v7
-          # - linux/arm/v6   # Not supported by go official image.
+          - 386
+          - amd64
+          - arm
+          - arm64
+          - ppc64
+          - ppc64le
+          - riscv64
+          - s390x
+          - riscv64
     steps:
       - run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
-      - uses: docker/setup-qemu-action@v3
+      - uses: actions/setup-go@v5
         with:
-          platforms: ${{ matrix.arch }}
+          go-version-file: go.mod
+      - run: |
+          sudo apt -y update
+          sudo apt -y install qemu-user
       - name: Docker run
-        run: |
-          docker run \
-            --rm \
-            -v $(pwd):/${{ github.workspace }} \
-            --platform ${{ matrix.arch }} \
-            golang:1.23.2 \
-            bash -c "go run /${{ github.workspace }}/main.go"
+        run: make ${{ matrix.arch }}
