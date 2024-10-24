@@ -6,7 +6,7 @@ amd64:
 .PHONY: 386
 386:
 	GOARCH=386 go build
-	qemu-i386  ./qemu-actions
+	qemu-i386 ./qemu-actions
 
 .PHONY: arm
 arm:
