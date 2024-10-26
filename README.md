@@ -4,7 +4,18 @@
 
 Sample application is written in [Go](https://go.dev/).
 
+It only output GOOS and GOARCH. See [main.go](main.go).
+
 Binaries for target architecture is built by cross compile using [GOARCH](https://tip.golang.org/wiki/WindowsCrossCompiling).
+
+```go
+import "runtime"
+
+func main() {
+ println("GOOS :", runtime.GOOS)
+ println("GOARCH :", runtime.GOARCH)
+}
+```
 
 ## Action
 
