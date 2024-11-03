@@ -20,6 +20,7 @@ jobs:
           - riscv64
           - s390x
           - riscv64
+          - loong64
     steps:
       - run: git config --global core.autocrlf false
       - uses: actions/checkout@v4

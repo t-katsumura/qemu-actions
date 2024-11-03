@@ -37,3 +37,8 @@ riscv64:
 s390x:
 	GOARCH=s390x go build
 	qemu-s390x ./qemu-actions
+
+.PHONY: loong64
+loong64:
+	GOARCH=loong64 go build
+	qemu-loong64 ./qemu-actions
